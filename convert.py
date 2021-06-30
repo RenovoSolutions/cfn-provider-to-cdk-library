@@ -98,8 +98,12 @@ def main():
     copy_and_overwrite(f'{tmpdir}/aws-cdk/packages/@aws-cdk/{org_name}-{scope_name}', final_package_path)
 
     print('INFO: Will replace package.json in final package')
+    package_name = data["typeName"].replace("::", "-").lower()
+    if not args.npmscope == None:
+      package_name = f'{args.npmscope}/{data["typeName"].replace("::", "-").lower()}'
+
     packagejson = {
-      "name": data["typeName"].replace("::", "-").lower(),
+      "name": package_name,
       "version": args.version,
       "description": f"The CDK Construct Library for {data['typeName']}",
       "main": "dist/index.js",
@@ -151,6 +155,7 @@ def argument_parser(cli_args, validate=True):
   parser.add_argument('--version', help='Version of the output package', default='0.1.0', dest='version')
   parser.add_argument('--author', help='Package author', default='', dest='author')
   parser.add_argument('--cdk-version', help='CDK package version for final package', default='^1.110.1', dest='cdkver')
+  parser.add_argument('--npm-scope', help='The npm registry user or organization scope', default=None, dest='npmscope')
 
   args, discard = parser.parse_known_args(cli_args)
 
