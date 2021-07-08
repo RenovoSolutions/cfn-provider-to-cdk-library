@@ -90,18 +90,15 @@ def main():
     print('INFO: Copying generated ts to package folder')
     shutil.copyfile(f'{tmpdir}/aws-cdk/tools/cfn2ts/lib/{scope_name}.generated.ts', f'{tmpdir}/aws-cdk/packages/@aws-cdk/{org_name}-{scope_name}/lib/{scope_name}.generated.ts')
 
-    # print('INFO: Building package')
-    # os.system(f'cd {tmpdir}/aws-cdk/packages/@aws-cdk/{org_name}-{scope_name}; ../../../scripts/buildup')
+    package_name = f'{args.npmprefix}{data["typeName"].replace("::", "-").lower()}'
+    if not args.npmscope == None:
+      package_name = f'{args.npmscope}/{package_name}'
 
     print('INFO: Copying final package')
-    final_package_path = f'{args.output_path}/{data["typeName"].replace("::", "-").lower()}'
+    final_package_path = f'{args.output_path}/{package_name}'
     copy_and_overwrite(f'{tmpdir}/aws-cdk/packages/@aws-cdk/{org_name}-{scope_name}', final_package_path)
 
     print('INFO: Will replace package.json in final package')
-    package_name = data["typeName"].replace("::", "-").lower()
-    if not args.npmscope == None:
-      package_name = f'{args.npmscope}/{data["typeName"].replace("::", "-").lower()}'
-
     packagejson = {
       "name": package_name,
       "version": args.version,
@@ -156,6 +153,7 @@ def argument_parser(cli_args, validate=True):
   parser.add_argument('--author', help='Package author', default='', dest='author')
   parser.add_argument('--cdk-version', help='CDK package version for final package', default='^1.110.1', dest='cdkver')
   parser.add_argument('--npm-scope', help='The npm registry user or organization scope', default=None, dest='npmscope')
+  parser.add_argument('--npm-package-prefix', help='The prefix for the package name, such as aws-cdk-', default='aws-cdk-', dest='npmprefix')
 
   args, discard = parser.parse_known_args(cli_args)
 
