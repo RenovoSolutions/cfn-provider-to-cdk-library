@@ -151,7 +151,7 @@ def argument_parser(cli_args, validate=True):
   parser.add_argument('--output-path', '-o', help='The output path.', default='./', dest='output_path')
   parser.add_argument('--version', help='Version of the output package', default='0.1.0', dest='version')
   parser.add_argument('--author', help='Package author', default='', dest='author')
-  parser.add_argument('--cdk-version', help='CDK package version for final package', default='^1.110.1', dest='cdkver')
+  parser.add_argument('--cdk-version', help='CDK package version for final package', default='^1.118.0', dest='cdkver')
   parser.add_argument('--npm-scope', help='The npm registry user or organization scope', default=None, dest='npmscope')
   parser.add_argument('--npm-package-prefix', help='The prefix for the package name, such as aws-cdk-', default='aws-cdk-', dest='npmprefix')
 
